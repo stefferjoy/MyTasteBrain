@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/taste_memory.dart';
+import 'recipe_detail_screen.dart';
 
 /// Displays all saved recipes in the user's local taste memory.
 class SavedRecipesScreen extends StatelessWidget {
@@ -38,8 +39,16 @@ class SavedRecipesScreen extends StatelessWidget {
                             const SizedBox(height: 4),
                             Text('Tags: ${recipe.tags.join(', ')}'),
                           ],
+                          const SizedBox(height: 4),
+                          Text('Source: ${recipe.sourceType}'),
                         ],
                       ),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => RecipeDetailScreen(recipe: recipe)),
+                        );
+                      },
                     ),
                   );
                 },
