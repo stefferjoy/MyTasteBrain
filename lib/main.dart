@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'data/auth_model.dart';
 import 'data/taste_memory.dart';
-import 'screens/home_screen.dart';
+import 'screens/auth/login_screen.dart';
 
-/// Entry point for the application. Wraps the [HomeScreen] in a
-/// [ChangeNotifierProvider] so that widgets deeper in the tree can react
-/// to changes in the user's food history and preferences. This is
-/// deliberately minimal so that you can add additional providers or
-/// configuration later on.
+/// Entry point for the application.
 void main() {
   runApp(const MyApp());
 }
@@ -18,8 +15,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => TasteMemoryModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthModel()),
+        ChangeNotifierProvider(create: (_) => TasteMemoryModel()),
+      ],
       child: MaterialApp(
         title: 'My Taste Brain',
         debugShowCheckedModeBanner: false,
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
           useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        home: const LoginScreen(),
       ),
     );
   }
