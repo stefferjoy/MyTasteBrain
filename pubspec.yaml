@@ -15,6 +15,7 @@ dependencies:
   path: ^1.9.0
   google_mlkit_text_recognition: ^0.15.1
   google_mlkit_genai_speech_recognition: ^0.1.0
+  flutter_gemma: ^0.13.2
 
 dev_dependencies:
   flutter_test:
