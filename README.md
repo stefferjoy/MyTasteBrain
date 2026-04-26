@@ -1,34 +1,142 @@
 # My Taste Brain
 
-A Flutter starter app for a private food memory experience.
+A Flutter MVP for a private, local-first food memory app.
 
-The app helps users:
+The product direction is:
 
-- Add ingredients they have at home.
-- Save recipes with ingredients and optional tags.
-- See recipe suggestions ranked by what they can cook with the fewest missing ingredients.
-- Keep the early food-memory logic local inside the app.
+> A private food memory that learns what users save, cook, skip, and already have at home.
 
-## Current MVP
+## MVP build order
 
-This first version is intentionally small. It does not use cloud AI yet. It focuses on the core product loop:
+The MVP is being built in this order:
 
-```text
-ingredients at home + saved recipes = personalized recipe suggestions
-```
+1. Taste profile database
+2. Saved recipes
+3. Pantry + leftovers
+4. Local search/matching
+5. Local AI rewrite/suggestion
 
-## Project structure
+## What is implemented now
+
+### 1. Taste profile database
+
+The app now uses SQLite through `sqflite`.
+
+Local profile data includes:
+
+- preferred cuisines
+- preferred tags
+- disliked ingredients
+- spice level
+- max cooking time
+- budget level
+- diet notes
+
+### 2. Saved recipes
+
+Users can save recipes with:
+
+- title
+- ingredients
+- tags
+- source type
+- source URL
+- creator/source credit
+- raw pasted text
+- steps
+- cooked count
+- skipped count
+
+There is also an import screen for pasted recipe captions/text.
+
+### 3. Pantry + leftovers
+
+Users can save pantry items and leftovers with:
+
+- item name
+- category
+- quantity
+- unit
+- expiry date
+- storage location
+- leftover flag
+- notes
+
+The app shows:
+
+- pantry items
+- leftovers
+- use-first items
+
+### 4. Local search/matching
+
+The local matcher ranks saved recipes using:
+
+- available pantry items
+- missing ingredients
+- leftovers used
+- expiring items used
+- preferred tags
+- cooked/skipped history
+- disliked ingredient penalty
+
+### 5. Local AI rewrite/suggestion scaffold
+
+A `LocalAiService` is added as the boundary for Gemma 3 1B / MediaPipe style native integration.
+
+The app also includes:
+
+- OCR service wrapper for Google ML Kit text recognition
+- voice input service wrapper for ML Kit GenAI speech recognition
+- local fallback recipe text parser
+
+## Current project structure
 
 ```text
 lib/
-  main.dart
+  core/
+    db/
+      app_database.dart
+    utils/
+      csv_utils.dart
   data/
+    auth_model.dart
     taste_memory.dart
+  features/
+    local_ai/
+      local_ai_service.dart
+      models/ai_suggestion.dart
+    matching/
+      models/recipe_match.dart
+      services/recipe_matcher.dart
+    ocr/
+      ocr_service.dart
+    pantry/
+      data/pantry_repository.dart
+      models/pantry_item.dart
+    recipes/
+      data/recipe_repository.dart
+      services/recipe_text_parser.dart
+    taste_profile/
+      data/taste_profile_repository.dart
+      models/taste_profile.dart
+    voice/
+      voice_input_service.dart
   models/
     recipe.dart
   screens/
-    home_screen.dart
+    auth/
+      login_screen.dart
+      register_screen.dart
+    pantry/
+      add_pantry_item_screen.dart
+      pantry_screen.dart
+    taste_brain/
+      taste_brain_screen.dart
     add_recipe_screen.dart
+    home_screen.dart
+    import_recipe_screen.dart
+    recipe_detail_screen.dart
     saved_recipes_screen.dart
 ```
 
@@ -41,21 +149,18 @@ flutter pub get
 flutter run
 ```
 
-## Next features
+If this repository was created without iOS/Android folders, generate them first:
 
-Good next steps:
+```bash
+flutter create .
+flutter pub get
+flutter run
+```
 
-- Add local persistence with Hive, Isar, Drift, or SQLite.
-- Add a saved recipe import flow for copied Instagram/TikTok captions.
-- Add a `What can I cook?` mode for ingredients at home.
-- Add a `missing ingredients` grocery list.
-- Add optional Instacart shopping-list integration later.
-- Add on-device AI later for private taste insights.
+## Important MVP notes
 
-## Product direction
-
-This should not become a generic AI recipe app.
-
-The stronger direction is:
-
-> A private food memory that learns what users save, cook, skip, and already have at home.
+- Auth is still local/demo only.
+- SQLite data stays on device.
+- OCR and voice wrappers are added, but native permissions and UI flows still need a follow-up pass.
+- Local AI is scaffolded through a service boundary. Native Gemma/MediaPipe wiring still needs a platform-specific pass.
+- The app should keep working without AI because the SQLite memory and matcher are the core product.
