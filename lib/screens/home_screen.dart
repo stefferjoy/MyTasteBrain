@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../data/taste_memory.dart';
 import 'add_recipe_screen.dart';
+import 'import_recipe_screen.dart';
 import 'pantry/pantry_screen.dart';
 import 'saved_recipes_screen.dart';
 import 'taste_brain/taste_brain_screen.dart';
@@ -47,6 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('My Taste Brain'),
         actions: [
+          IconButton(
+            tooltip: 'Import recipe',
+            icon: const Icon(Icons.download_outlined),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const ImportRecipeScreen()),
+              );
+            },
+          ),
           IconButton(
             tooltip: 'Taste Brain',
             icon: const Icon(Icons.psychology_outlined),
@@ -94,6 +104,40 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 6),
                     const Text(
                       'Add what you have at home. The app suggests saved recipes using local data only.',
+                    ),
+                    const SizedBox(height: 14),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        ActionChip(
+                          avatar: const Icon(Icons.download_outlined),
+                          label: const Text('Import recipe text'),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const ImportRecipeScreen()),
+                            );
+                          },
+                        ),
+                        ActionChip(
+                          avatar: const Icon(Icons.kitchen_outlined),
+                          label: const Text('Pantry'),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const PantryScreen()),
+                            );
+                          },
+                        ),
+                        ActionChip(
+                          avatar: const Icon(Icons.psychology_outlined),
+                          label: const Text('Taste Brain'),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const TasteBrainScreen()),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                     if (tasteMemory.errorMessage != null) ...[
                       const SizedBox(height: 12),
