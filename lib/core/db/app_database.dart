@@ -25,10 +25,15 @@ class AppDatabase {
     _database = await openDatabase(
       fullPath,
       version: databaseVersion,
+      onConfigure: _onConfigure,
       onCreate: _onCreate,
     );
 
     return _database!;
+  }
+
+  Future<void> _onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -101,6 +106,10 @@ class AppDatabase {
         created_at TEXT NOT NULL
       )
     ''');
+
+    await db.execute('CREATE INDEX idx_recipe_ingredients_recipe_id ON recipe_ingredients(recipe_id)');
+    await db.execute('CREATE INDEX idx_pantry_items_name ON pantry_items(name)');
+    await db.execute('CREATE INDEX idx_food_events_type ON user_food_events(event_type)');
 
     final now = DateTime.now().toIso8601String();
     await db.insert('taste_profile', {
