@@ -2,7 +2,6 @@ name: taste_memory_ai
 description: A Flutter app that learns your food preferences and suggests recipes based on your saved recipes and available ingredients.
 publish_to: 'none'
 
-# The following version number is automatically generated during the build process.
 version: 1.0.0+1
 
 environment:
@@ -12,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.0.0
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
