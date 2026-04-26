@@ -2,33 +2,26 @@ import 'dart:async';
 
 import 'package:google_mlkit_genai_speech_recognition/google_mlkit_genai_speech_recognition.dart';
 
-/// Google ML Kit GenAI Speech Recognition wrapper.
-///
-/// MVP use case:
-/// user speaks pantry items -> transcript -> app parses comma-like food terms.
-///
-/// Note: the current plugin exposes real-time streaming recognition. Platform
-/// availability must be checked at runtime before showing the voice button.
 class VoiceInputService {
-  VoiceInputService({SpeechRecognizer? speechRecognizer})
-      : _speechRecognizer = speechRecognizer ?? SpeechRecognizer();
+  VoiceInputService({SpeechRecognizer? recognizer})
+      : _recognizer = recognizer ?? SpeechRecognizer();
 
-  final SpeechRecognizer _speechRecognizer;
+  final SpeechRecognizer _recognizer;
 
   Future<bool> isAvailable() async {
-    final status = await _speechRecognizer.checkStatus();
+    final status = await _recognizer.checkStatus();
     return status == FeatureStatus.available;
   }
 
   Stream<String> startListening() {
-    return _speechRecognizer.startRecognition();
+    return _recognizer.startRecognition();
   }
 
   Future<void> stopListening() async {
-    await _speechRecognizer.stopRecognition();
+    await _recognizer.stopRecognition();
   }
 
-  Future<void> close() async {
-    await _speechRecognizer.close();
+  void close() {
+    _recognizer.close();
   }
 }
